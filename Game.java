@@ -7,7 +7,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -118,6 +122,7 @@ public class Game extends JPanel implements Runnable, KeyListener {
     private boolean playerUpdated;
     private boolean option1;
     private boolean option2;
+    private File saveFile;
     
     public Game() {
         p = new Sound();
@@ -128,6 +133,7 @@ public class Game extends JPanel implements Runnable, KeyListener {
         twogif = new ImageIcon("2.gif");
         threegif = new ImageIcon("3.gif");
         fourgif = new ImageIcon("4.gif");
+        saveFile= new File("savedfile2.0.txt");
         warriorselectedtxt = new ImageIcon("warriorselected.gif");
         wizardselectedtxt = new ImageIcon("wizardselected.gif");
         bruteselectedtxt = new ImageIcon("bruteselected.gif");
@@ -211,6 +217,7 @@ public class Game extends JPanel implements Runnable, KeyListener {
         confirmselection=false;
         setFocusable(true);
     }
+    
     private ArrayList<Boss> setBoss() {
         ArrayList<Boss> temp = new ArrayList<>();
         for (int i = 0; i < 1; i++) {
@@ -274,7 +281,51 @@ public class Game extends JPanel implements Runnable, KeyListener {
             e.printStackTrace();
         }
     }
+    public void createFile(){
+        try{
+        if(saveFile.createNewFile()){
+            System.out.println("syccessfykky created file");
+        }
+        else{
+            System.out.println("file already exists");
+        }
+    }
+    catch(IOException e){
+        e.printStackTrace();
+    }
+    }
+    public void writeToFile(){
+        FileWriter myWriter;
+        try {
+            myWriter = new FileWriter(saveFile);
+            if(points==30){
+                myWriter.write("win");
+            }
+            else{
+                myWriter.write("youhave"+points);
+            }
+            myWriter.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        
+}
+public void readFile(){
+    Scanner sc;
+    try {
+        sc = new Scanner(saveFile);
+        while(sc.hasNext()){
+            System.out.println(sc.next());
+    } 
+}catch (FileNotFoundException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
     
+}
+
     public void paint(Graphics g) {
         
         super.paint(g);
